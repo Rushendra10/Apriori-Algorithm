@@ -193,7 +193,7 @@ class Rule:
     def __str__(self):
         
         # return ("{" + str(self.left) + "}" + "->" + "{" + str(self.right) + "}")
-        return (str(self.left) + str(self.right) + "[" + str(self.support()) + " " + str(round(self.confidence(), 4)) + "]")
+        return (str(self.left) + str(self.right) + "[" + str(round(self.support(), 4)) + "," + str(round(self.confidence(), 4)) + "]")
 
     def __eq__(self, other):
 
@@ -277,9 +277,43 @@ for i in table:
 
 strong_rules = []
 
+print("The strong association rules generated are as follows:\n")
+
 for rule in rules:
     if (rule.confidence()>MINCONF):
-        print(rule)
+
+        l = rule.left
+        r = rule.right
+
+        s1 = ""
+        s1+="{"
+
+        for i in l:
+            s1+=i
+            s1+=","
+        
+        res1 = ""
+        for i in range(0, len(s1)-1):
+            res1+=s1[i]
+        
+        res1+="}"
+
+        
+
+        s2 = ""
+        s2+="{"
+        for i in r:
+            s2+=i
+            s2+=","
+        
+        res2 = ""
+        for i in range(0, len(s2)-1):
+            res2+=s2[i]
+        
+        res2+="}"
+
+        print(res1 + res2 + "[" + str(round(rule.support(), 4)) + "," + str(round(rule.confidence(), 4)) + "]")
+
         strong_rules.append(rule)
 
 
