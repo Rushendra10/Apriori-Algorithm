@@ -6,7 +6,7 @@ n = len(sys.argv)
 if (n==4):
     DBFILE = sys.argv[1]
     MINSUP = float(sys.argv[2])
-    CONF = float(sys.argv[3])
+    MINCONF = float(sys.argv[3])
 
 else:
     print("Improper command line arguments")
@@ -78,10 +78,17 @@ def find_LK(LK_1, k):
             l1 = sorted(list(LK_1[i]))[:k-2]
             l2 = sorted(list(LK_1[j]))[:k-2]
 
+
+            
+
             if (l1==l2):
 
                 l1 = set(LK_1[i])
                 l2 = set(LK_1[j])
+
+                # print(l1)
+                # print(l2)
+                # print("-"*30)
 
                 l1 = frozenset(l1.union(l2))
 
@@ -144,9 +151,13 @@ def apriori():
 
     while(True):
 
+        # print("in loop")
+
         k+=1
 
         LK, sup = find_LK(L, k)
+
+        L = LK
 
         if (len(LK)==0):
             break
@@ -182,7 +193,11 @@ class Rule:
     def __str__(self):
         
         # return ("{" + str(self.left) + "}" + "->" + "{" + str(self.right) + "}")
-        return (str(self.left) + "->" + str(self.right) + "[" + str(self.support()) + "]")
+        return (str(self.left) + str(self.right) + "[" + str(self.support()) + " " + str(round(self.confidence(), 4)) + "]")
+
+    def __eq__(self, other):
+
+        return (self.left==other.left and self.right==other.right)
 
     def support(self):
         
@@ -192,6 +207,9 @@ class Rule:
         ind = n1+n2-1
 
         union = self.left.union(self.right)
+
+        if (len(union)!=n1+n2):
+            return -1
 
         # print(type(union))
 
@@ -203,7 +221,23 @@ class Rule:
 
         return support
 
-    
+    def confidence(self):
+
+        n1 = len(self.left)
+        n2 = len(self.right)
+
+        union = self.left.union(self.right)
+
+        if (len(union)!=n1+n2):
+            return -1
+
+        sup_union = sups[n1+n2-1][frozenset(self.left.union(self.right))]
+
+        sup_left = sups[n1-1][frozenset(self.left)]
+
+        conf = sup_union/sup_left
+
+        return conf
 
 #######################################################################
 
@@ -235,8 +269,18 @@ for i in table:
                     if (x!=y):
                         rule = Rule(set(reqd_subsets[x]), set(reqd_subsets[y]), table, sups)
                     
-                        print(rule)
-                        
-                        rules.append(rule)
+                        # print(rule)
 
-            # print(list(reqd_subsets))
+                        if (rule.support()!=-1):
+                            rules.append(rule)
+                        
+
+strong_rules = []
+
+for rule in rules:
+    if (rule.confidence()>MINCONF):
+        print(rule)
+        strong_rules.append(rule)
+
+
+# print(table)
