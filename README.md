@@ -1,4 +1,4 @@
-# Apriori Algorithm and Park Chen Yu Algorithms (Data Mining)
+# Apriori and Park Chen Yu Algorithms (Data Mining)
 
 The Apriori Algorithm Program takes as input the items (L1, L2, ...), their counts (frequency) and returns the most frequent itemsets that fulfill the minimum support and confidence criteria.
 
