@@ -11,4 +11,3 @@
 - The PCY Algorithm, on the other hand, accomplishes the same in a more memory-efficient approach with the use of hash tables to store the counts of smaller subsets.
 
 - The implementation also uses the **python's memory profiler** to track the memeory usage throughout the runtime. The comparsion of **peak and average** memory usage revealed that the **PCY** algorithm performs much better compared to the **Apriori** algorithm.
-"*
